@@ -112,3 +112,14 @@ foo.next();  // {value: { a: "1", b: "2" }, done: false}
 
 foo.next();  // undefined is not a function
 ```
+
+
+
+
+## co 和 koa
+
+#### co
+
+```co``` 库的主要是用来通过生成器函数以及 ```yield``` 解决回调嵌套的
+
+待续
