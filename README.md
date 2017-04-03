@@ -225,4 +225,69 @@ function co(gen) {
 
 
 
+#### 上下文
+
+但是在某些特殊情况下会有意想不到的结果，比如输构造函数：
+
+```js
+function Person (name) {
+    this.name = name;
+}
+
+Person.prototype.getName = function (callback) {
+    var _this = this;
+    setImmediate(function () {
+        callback(null, this.name)
+    })
+}
+
+var person = new Person("abc");
+
+person.getName(function(err, name) {
+    console.log(name)
+})
+```
+
+使用 ```co``` 改造之后：
+
+```js
+var co = require("co");
+
+function Person (name) {
+    this.name = name;
+}
+
+Person.prototype.getName = function (callback) {
+    var _this = this;
+    setImmediate(function () {
+        console.log(null, _this.name)
+    })
+}
+
+var person = new Person("abc");
+
+co(function* () {
+    var name = yield person.getName;
+    console.log(name);  // undefined
+}).catch(function(err){
+    console.log(err);
+})
+```
+
+这是因为 ```getName``` 中的 ```this``` 已经不再指向 ```person``` 而是指向 ```co``` 的上下文，有两种解决方式，一种是使用 ```bind```，即 ```yield person.getName.bind(person)```
+
+另外一种方式是使用生成器函数 ```yield*```：
+
+```js
+co(function* (){
+    var name = yield* person.getName();
+    console.log(name);
+}).catch(function(err){
+    console.log(err);
+})
+```
+
+
+
+
 
