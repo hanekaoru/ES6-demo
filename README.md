@@ -227,7 +227,7 @@ function co(gen) {
 
 #### 上下文
 
-但是在某些特殊情况下会有意想不到的结果，比如输构造函数：
+但是在某些特殊情况下会有意想不到的结果，比如说构造函数：
 
 ```js
 function Person (name) {
@@ -288,6 +288,20 @@ co(function* (){
 ```
 
 
+#### koa
+
+可以参考：[koa](https://github.com/hanekaoru/full-stack/blob/master/koa.MD)
+
+```js
+var koa = require("koa");
+var app = koa();
+
+app.use(function* () {
+    this.body = "hello world";
+})
+
+app.listn(3000)
+```
 
 
 
